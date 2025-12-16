@@ -1,0 +1,39 @@
+# Название пайплайна, будет отображаться в интерфейсе GitHub
+name: Text Analyzer CI/CD Pipeline
+
+# События, которые запускают пайплайн
+on:
+  push:
+    branches: [ "main" ]
+
+# Задачи, которые выполняются в пайплайне
+jobs:
+  test:
+    # Задача выполняется на последней версии Ubuntu
+    runs-on: ubuntu-latest
+
+    # Шаги, которые выполняются в рамках этой задачи
+    steps:
+    # Шаг 1: Получаем код из репозитория
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Шаг 2: Устанавливаем Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    # Шаг 3: Устанавливаем зависимости
+    - name: Install dependencies
+      run: pip install Flask bandit coverage
+
+    # Шаг 4: Запускаем тесты с измерением покрытия
+    - name: Run unit tests with coverage
+      run: |
+        coverage run -m unittest test_app.py
+        coverage report
+
+    # Шаг 5: Запускаем проверку безопасности
+    - name: Run security check with bandit
+      run: bandit -r .

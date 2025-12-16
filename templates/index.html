@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Анализатор текста</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            background-color: #efe3d6ff;
+            font-family: Arial;
+        }
+        
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        .card {
+            background-color: #faf6eeff;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 1px solid #dadadaff;
+            border-radius: 4px;
+            box-sizing: border-box;
+
+        }
+        
+        button {
+            background-color: #2caf4bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        button:hover {
+            background-color: #1f8a36ff;
+        }
+        
+        .result-card {
+            background-color: #faf6eeff;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .error {
+            color: #ce3545ff;
+            background-color: #f4cdd0ff;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+            margin: 20px 0;
+        }
+                
+        li {
+            margin: 5px 0;
+        }
+        
+        .server-info {
+            color: #4c5358ff;
+            font-size: 14px;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Анализатор текста</h1>
+        
+        <div class="card">
+            <form method="POST" action="/">
+                <textarea name="text" rows="10" placeholder="Введите текст здесь..."></textarea>
+                <button type="submit">Анализировать</button>
+            </form>
+        </div>
+        
+        {% if result %}
+        <div class="result-card">
+            <h2>Результат:</h2>
+            <p><strong>Всего слов:</strong> {{ result.total_words }}</p>
+            
+            <p><strong>Частые слова:</strong></p>
+            <ul>
+            {% for word in result.top_words %}
+                <li>"{{ word.word }}" - {{ word.count }} раз</li>
+            {% endfor %}
+            </ul>
+            
+            <p class="server-info">Обработано сервером: {{ result.server_port }}</p>
+        </div>
+        {% endif %}
+        
+        {% if error %}
+        <div class="error">
+            <strong>Ошибка:</strong> {{ error }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
